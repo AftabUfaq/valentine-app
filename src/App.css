@@ -2,6 +2,7 @@
 
 * {
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent; /* Removes blue tap box on mobile */
 }
 
 body, html, #root {
@@ -14,11 +15,13 @@ body, html, #root {
 
 .container {
   width: 100vw;
-  height: 100vh;
-  display: grid;
-  place-items: center; /* PERFECT CENTERING */
+  height: 100dvh; /* Dynamic viewport height for mobile browsers */
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background: radial-gradient(circle, #ff1f44 0%, #8b0000 100%);
   position: relative;
+  padding: 20px;
 }
 
 .card {
@@ -26,134 +29,98 @@ body, html, #root {
   z-index: 10;
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(15px);
-  padding: 50px 40px;
+  padding: 40px 20px;
   border-radius: 30px;
   border: 1px solid rgba(255, 255, 255, 0.2);
-  width: 400px;
-  max-width: 90%;
+  width: 100%;
+  max-width: 380px;
   text-align: center;
   box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
 }
 
 .title {
   font-family: 'Dancing Script', cursive;
-  font-size: 42px;
+  font-size: 36px;
   color: #fff;
   margin: 0;
-  text-shadow: 2px 2px 10px rgba(0,0,0,0.2);
 }
 
 .subtitle {
-  font-size: 14px;
-  letter-spacing: 5px;
+  font-size: 12px;
+  letter-spacing: 4px;
   color: #ffb7c5;
   text-transform: uppercase;
   margin-top: 5px;
 }
 
-.message-area {
-  margin: 40px 0;
-  color: white;
-}
-
-.message-area p {
-  font-size: 20px;
-  margin: 0;
-  opacity: 0.9;
-}
-
 .highlight-text {
   font-family: 'Dancing Script', cursive;
-  font-size: 65px;
+  font-size: 55px;
   color: #fff;
   display: block;
-  margin-top: 10px;
 }
 
 .guilt-box {
-  height: 54px;
-  margin-bottom: 20px;
-  color: #ffb7c5;
-  font-style: italic;
-  font-size: 15px;
+  height: 40px; /* Space for longer messages */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 15px 0;
 }
 
-/* BUTTONS */
+.guilt-text {
+  color: #ffb7c5;
+  font-size: 14px;
+  font-style: italic;
+  animation: fadeIn 0.3s ease;
+}
+
 .btn-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 20px;
-  min-height: 120px; /* Space for No button to jump */
+  gap: 15px;
+  height: 140px; /* Safe movement zone */
+  position: relative;
 }
 
 button {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 14px 32px;
+  padding: 12px 28px;
   font-size: 18px;
   font-weight: 600;
   border-radius: 50px;
   border: none;
   cursor: pointer;
-  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .yes-btn {
   background: white;
   color: #ff1f44;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-}
-
-.yes-btn:hover {
-  transform: scale(1.15);
+  z-index: 20;
 }
 
 .no-btn {
   background: #3a0000;
   color: white;
   border: 1px solid rgba(255,255,255,0.2);
-  transition: transform 0.3s ease; /* Smooth jump */
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  touch-action: none; /* Crucial: stops phone from scrolling when you touch the button */
 }
 
-/* DECORATION */
-.hearts-bg {
-  position: absolute;
-  top: 0; left: 0; width: 100%; height: 100%;
-  pointer-events: none;
-}
-
-.bg-heart {
-  position: absolute;
-  color: rgba(255, 255, 255, 0.1);
-  animation: floatAround 10s infinite linear;
-}
-
-/* Randomize positions for bg hearts */
-.bg-heart:nth-child(odd) { left: 10%; top: 20%; animation-delay: 2s; }
-.bg-heart:nth-child(even) { right: 15%; bottom: 20%; animation-delay: 4s; }
-
-@keyframes floatAround {
-  0% { transform: translateY(0) rotate(0); opacity: 0; }
-  50% { opacity: 0.2; }
-  100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
-}
-
-/* SUCCESS VIEW */
-.success-view {
-  background: #ff1f44;
-}
-
+/* SUCCESS IMAGE */
 .image-frame {
-  width: 280px;
-  height: 380px;
-  border: 12px solid white;
-  border-radius: 15px;
+  width: 100%;
+  max-width: 260px;
+  height: 340px;
+  border: 10px solid white;
+  border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-  transform: rotate(-3deg);
-  margin-bottom: 20px;
+  margin: 0 auto 20px;
+  transform: rotate(-2deg);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
 }
 
 .image-frame img {
@@ -164,16 +131,18 @@ button {
 
 .success-text {
   font-family: 'Dancing Script', cursive;
-  font-size: 48px;
+  font-size: 38px;
   color: white;
-  text-align: center;
 }
 
-.guilt-text {
-  font-family: 'Poppins', sans-serif;   /* Custom font */
-  font-weight: 700;                     /* Bold */
-  font-size: 24px;                      /* Bigger text */
-  color: #fff;                       /* Optional emotional color */
-  text-align: center;
-  display: inline-block;
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Background Hearts */
+.bg-heart {
+  position: absolute;
+  color: rgba(255, 255, 255, 0.1);
+  pointer-events: none;
 }

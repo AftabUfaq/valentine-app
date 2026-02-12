@@ -3,56 +3,45 @@ import { Heart, HeartCrack } from "lucide-react";
 import "./App.css";
 
 const NO_MESSAGES = [
-   "Itna bhi kya sochna... bas haan keh do 💞",
-  "Mera dil sirf tumhara hai 💖",
-  "Please mana mat karo... 🥹",
-  "Ek choti si haan meri duniya badal degi 🌍❤️",
-  "Dil ko itna intezar mat karao ⏳💔",
-  "Tumhari ek smile sab theek kar deti hai 😊💕",
-  "Abhi bhi waqt hai... haan keh do ✨",
-  "Mujhe reject mat karo, it hurts 😔❤️",
-  "Tum bina sab adhura sa lagta hai 💫",
-  "Bas ek baar haan bol do... please 🥺💗",
-  "Dil se pooch lo, jawab haan hi hoga 💓",
-  "Itni berukhi achi nahi lagti 💔",
-  "You mean more than you think 💝",
-  "Mera dil fragile hai... sambhal ke 💞",
-  "Kya sach mein no? Ek baar phir socho 🥺",
-  "Are you sure? 🥺",
-  "Think again! 💔",
-  "Pehle haan kaho! ✨",
-  "Dil tod diya... 😭",
-  "Don't do this! ❤️‍🩹",
-  "Wrong answer! 🚫",
+  "Itna bhi kya sochna... bas haan keh do 💞", "Mera dil sirf tumhara hai 💖",
+  "Please mana mat karo... 🥹", "Ek choti si haan meri duniya badal degi 🌍❤️",
+  "Dil ko itna intezar mat karao ⏳💔", "Tumhari ek smile sab theek kar deti hai 😊💕",
+  "Abhi bhi waqt hai... haan keh do ✨", "Mujhe reject mat karo, it hurts 😔❤️",
+  "Tum bina sab adhura sa lagta hai 💫", "Bas ek baar haan bol do... please 🥺💗",
+  "Dil se pooch lo, jawab haan hi hoga 💓", "Itni berukhi achi nahi lagti 💔",
+  "You mean more than you think 💝", "Mera dil fragile hai... sambhal ke 💞",
+  "Kya sach mein no? Ek baar phir socho 🥺", "Are you sure? 🥺",
+  "Think again! 💔", "Pehle haan kaho! ✨", "Dil tod diya... 😭",
+  "Don't do this! ❤️‍🩹", "Wrong answer! 🚫",
 ];
 
 function App() {
-  const noRef = useRef(null);
   const [yesClicked, setYesClicked] = useState(false);
   const [guiltMessage, setGuiltMessage] = useState("");
+  const [coords, setCoords] = useState({ x: 0, y: 0 });
 
-  const moveButton = () => {
-    const button = noRef.current;
-    // Limit movement to a 200px radius so it stays near the Yes button
-    const randomX = Math.floor(Math.random() * 200) - 100;
-    const randomY = Math.floor(Math.random() * 150) - 75;
+  const moveButton = (e) => {
+    // Prevent default touch behavior to stop accidental clicks
+    if (e && e.cancelable) e.preventDefault();
+    
+    const isMobile = window.innerWidth < 600;
+    const range = isMobile ? 120 : 200; // Smaller range for mobile screens
 
-    button.style.transform = `translate(${randomX}px, ${randomY}px)`;
-    setGuiltMessage(
-      NO_MESSAGES[Math.floor(Math.random() * NO_MESSAGES.length)],
-    );
+    const randomX = Math.floor(Math.random() * range) - (range / 2);
+    const randomY = Math.floor(Math.random() * range) - (range / 2);
+
+    setCoords({ x: randomX, y: randomY });
+    setGuiltMessage(NO_MESSAGES[Math.floor(Math.random() * NO_MESSAGES.length)]);
   };
 
   if (yesClicked) {
     return (
       <div className="container success-view">
-        <div className="card">
+        <div className="card success-card">
           <div className="final-card">
             <div className="image-frame">
-              <img
-                src="https://ai-image-upload-30-min.s3.eu-north-1.amazonaws.com/uploads/2b93e2c2-c23e-4498-9e35-7cebcbe76c71-happy-valentines-day-quotes-for-friends-lovers-valentine-quotes-friendship-love-couple-wallpaper-hd-25601440-wallpaper-preview.jpg"
-                alt="Love"
-              />
+              {/* Using your provided couple image */}
+              <img src="/out-3.jpg" alt="Love" />
             </div>
             <h1 className="success-text">I knew you'd say Yes! ❤️</h1>
           </div>
@@ -63,7 +52,6 @@ function App() {
 
   return (
     <div className="container">
-      {/* Background Decor */}
       <div className="hearts-bg">
         {[...Array(15)].map((_, i) => (
           <Heart key={i} className="bg-heart" size={Math.random() * 30 + 10} />
@@ -80,14 +68,20 @@ function App() {
         </div>
 
         <div className="guilt-box">
-         <p className="guilt-text">{guiltMessage && <span>{guiltMessage}</span>}</p> 
+          <p className="guilt-text">{guiltMessage || "Will you be mine?"}</p> 
         </div>
 
         <div className="btn-wrapper">
           <button className="yes-btn" onClick={() => setYesClicked(true)}>
             Yes <Heart size={18} fill="currentColor" />
           </button>
-          <button ref={noRef} className="no-btn" onMouseEnter={moveButton}>
+          <button 
+            className="no-btn" 
+            style={{ transform: `translate(${coords.x}px, ${coords.y}px)` }}
+            onPointerDown={moveButton} // Works for BOTH touch and mouse
+            onMouseEnter={moveButton}  // Backup for desktop
+            onClick={(e) => e.preventDefault()} // Blocks the actual click
+          >
             No <HeartCrack size={18} />
           </button>
         </div>
