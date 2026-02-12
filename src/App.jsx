@@ -40,7 +40,6 @@ function App() {
         <div className="card success-card">
           <div className="final-card">
             <div className="image-frame">
-              {/* Using your provided couple image */}
               <img src="/out-3.jpg" alt="Love" />
             </div>
             <h1 className="success-text">I knew you'd say Yes! ❤️</h1>
